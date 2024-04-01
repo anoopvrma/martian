@@ -74,4 +74,22 @@ To scale we need to upgrade plans from LLM providers. We can get RateLimitError 
 To support multiple LLM providers without impacting client code, we need to support common interface, which is declared in base_provider package.
 
 
+### Deploy
+
+api.py contains code to start the server, we just need to execute this file.
+
+```
+if __name__ == "__main__":
+    uvicorn.run("api:app", host="0.0.0.0", port=8000, reload=True)
+```
+
+### Testing
+
+This package supports swagger we can access it at following URL:
+
+``
+http://0.0.0.0:8000/docs
+``
+
+If we want to execute multiple calls at once, we can execute ``test_script.py`` file
 
