@@ -2,6 +2,7 @@
 import uvicorn
 from fastapi import FastAPI
 from models.model import Model
+from exceptions.error import InternalServerError
 
 app = FastAPI()
 
@@ -25,21 +26,27 @@ def read_root():
 @app.post("/complete")
 def complete(prompt: str, provider: str, max_tokens: int, temperature: float, top_p: float):
     if prompt and provider and max_tokens and temperature and top_p:
-        if provider == 'openai':
-            response = openai_model.complete(prompt, max_tokens, temperature, top_p)
+        try:
+            model = get_model(provider)
+            response = model.complete(prompt, max_tokens, temperature, top_p)
             return {"response": response}
-        elif provider == 'anthropic':
-            response = anthropic_model.complete(prompt, max_tokens, temperature, top_p)
-            return {"response": response}
-        elif provider == 'together':
-            response = together_model.complete(prompt, max_tokens, temperature, top_p)
-            return {"response": response}
-        else:
-            return {"error": "Unsupported engine"}
+        except InternalServerError as error:
+            return {"error": error.message}
     else:
         return {"error": "Missing required parameters"}
 
 # Additional endpoints can be added for other providers
+
+
+def get_model(provider: str):
+    if provider == 'openai':
+        return openai_model
+    elif provider == 'anthropic':
+        return anthropic_model
+    elif provider == 'together':
+        return together_model
+    else:
+        raise InternalServerError("Unsupported engine")
 
 
 if __name__ == "__main__":
