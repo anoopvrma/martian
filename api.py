@@ -8,13 +8,13 @@ app = FastAPI()
 
 # Replace "your_api_key_here" with your actual OpenAI API key
 
-openai_api_key = "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"
+openai_api_key = ""
 openai_model = Model(provider_name='openai', api_key=openai_api_key)
 
-anthropic_api_key = "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"
+anthropic_api_key = ""
 anthropic_model = Model(provider_name='anthropic', api_key=anthropic_api_key)
 
-together_api_key = "f67e3d65823db01cf45e224a07e06362a58d2d08f513af14a1af9a24cee6a6e2"
+together_api_key = ""
 together_model = Model(provider_name='together', api_key=together_api_key)
 
 
