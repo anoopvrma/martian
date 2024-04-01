@@ -12,7 +12,7 @@ class OpenAIProvider(BaseProvider):
         super().__init__(api_key)
         self.client = OpenAI(api_key=api_key)
 
-    def complete(self, prompt, max_tokens, temperature, top_p):
+    def complete(self, prompt, max_tokens, temperature, top_p, stream):
         # Make a completion request to OpenAI's API
         try:
             response = self.client.chat.completions.create(
@@ -25,10 +25,16 @@ class OpenAIProvider(BaseProvider):
                 model="gpt-3.5-turbo",
                 max_tokens=max_tokens,
                 temperature=temperature,
-                top_p=top_p
+                top_p=top_p,
+                stream=stream
             )
-            # Extract and return the generated text
-            return response
+
+            if stream is True:
+                for chunk in response:
+                    print(chunk.choices[0].delta.content or "", end="")
+            else:
+                # Extract and return the generated text
+                return response
         except openai.RateLimitError as error:
             raise InternalServerError("OpenAI plan exhausted, we will be back on this.")
         except openai.APIConnectionError as error:

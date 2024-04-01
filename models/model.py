@@ -16,6 +16,6 @@ class Model:
 
         # Initialize other provider classes as needed
 
-    def complete(self, prompt, max_tokens, temperature, top_p):
-        return self.provider.complete(prompt, max_tokens, temperature, top_p)
+    def complete(self, prompt, max_tokens, temperature, top_p, stream):
+        return self.provider.complete(prompt, max_tokens, temperature, top_p, stream)
         # Implement similar logic for other providers

@@ -24,18 +24,17 @@ def read_root():
 
 
 @app.post("/complete")
-def complete(prompt: str, provider: str, max_tokens: int, temperature: float, top_p: float):
+def complete(prompt: str, provider: str, max_tokens: int, temperature: float, top_p: float, stream: bool = False):
     if prompt and provider and max_tokens and temperature and top_p:
         try:
             model = get_model(provider)
-            response = model.complete(prompt, max_tokens, temperature, top_p)
+            response = model.complete(prompt, max_tokens, temperature, top_p, stream)
             return {"response": response}
         except InternalServerError as error:
+            print(error)
             return {"error": error.message}
     else:
         return {"error": "Missing required parameters"}
-
-# Additional endpoints can be added for other providers
 
 
 def get_model(provider: str):
